@@ -1,0 +1,2 @@
+### Health request
+GET http://localhost:8000/health HTTP/1.1
