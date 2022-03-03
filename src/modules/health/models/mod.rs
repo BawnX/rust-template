@@ -1,19 +1,28 @@
 use serde::{Deserialize, Serialize};
-use std::sync::RwLock;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Health {
     pub system_status: bool,
+    pub database_status: bool,
 }
 
-pub struct ObtainHealthQuery {
-    pub system_status: RwLock<bool>,
+#[derive(Debug, Serialize, Deserialize)]
+pub struct HealthResponse {
+    pub health: Health,
 }
 
-impl Default for ObtainHealthQuery {
-    fn default() -> Self {
-        Self {
-            system_status: RwLock::new(false),
+pub struct ObtainHealth {
+    pub system_status: bool,
+    pub database_status: bool,
+}
+
+impl From<Health> for HealthResponse {
+    fn from(health: Health) -> Self {
+        HealthResponse {
+            health: Health {
+                system_status: health.system_status,
+                database_status: health.database_status
+            },
         }
     }
 }

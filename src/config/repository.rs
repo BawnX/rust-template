@@ -1,8 +1,7 @@
 use std::future::{ready, Ready};
 use std::ops::Deref;
-use std::sync::{Arc, PoisonError};
+use std::sync::Arc;
 
-use crate::config::models::enums::RepositoryError;
 use actix_web::dev::Payload;
 use actix_web::error::ErrorBadRequest;
 use actix_web::{Error, FromRequest, HttpRequest};
@@ -32,7 +31,6 @@ impl<PARAM: 'static, OBJ: 'static> Deref for RepositoryInjector<PARAM, OBJ> {
 impl<PARAM: 'static, OBJ: 'static> FromRequest for RepositoryInjector<PARAM, OBJ> {
     type Error = Error;
     type Future = Ready<Result<Self, Self::Error>>;
-    type Config = ();
 
     fn from_request(req: &HttpRequest, _payload: &mut Payload) -> Self::Future {
         if let Some(injector) = req.app_data::<Self>() {

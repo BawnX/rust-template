@@ -1,5 +1,6 @@
 use thiserror::Error;
 
+#[allow(dead_code)]
 #[derive(Error, Debug)]
 pub enum RepositoryError {
     #[error("Poison Error: `{0}`")]
@@ -10,10 +11,4 @@ pub enum RepositoryError {
     DoesNotExist,
     #[error("This id format is not valid")]
     InvalidId,
-}
-
-#[derive(Error, Debug)]
-pub enum CqrsError {
-    #[error("Poison Error: `{0}`")]
-    LockError(String),
 }
