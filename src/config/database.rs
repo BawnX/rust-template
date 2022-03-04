@@ -1,19 +1,18 @@
-use std::any::Any;
-use std::error::Error;
-use cherry::connection::{PoolConfig, setup_pools};
-use cherry::DataSource;
+use std::sync::Arc;
+use actix::{Actor, SyncContext};
+use rbatis::rbatis::Rbatis;
+use crate::config::tracing::log;
 
-pub struct DbExecutor;
+#[derive(Debug, Clone)]
+pub struct DbExecutor(pub  Arc<Rbatis>);
 
-impl DataSource for DbExecutor {}
+impl Actor for DbExecutor {
+    type Context = SyncContext<Self>;
+}
 
-pub async fn setup(url: String) -> Result<DbExecutor, Box<dyn Error>> {
-    let config = [
-        (DbExecutor.type_id(), PoolConfig {
-            url: url.to_owned(),
-            ..Default::default()
-        }),
-    ];
-    setup_pools(config).await?;
-    Ok(DbExecutor)
+pub async fn setup(url: String) -> Arc<Rbatis> {
+    let rb = Rbatis::new();
+    rb.link(&*url).await.expect("rbatis link database fail");
+    log::info!("linking database successful!");
+    return Arc::new(rb);
 }

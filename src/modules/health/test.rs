@@ -1,6 +1,7 @@
 use actix_web::App;
 use actix_web::http::StatusCode;
 use actix_web::web::Data;
+use crate::modules::health::controllers::routes;
 use crate::modules::health::routes::routes;
 use crate::modules::health::services::health_check;
 

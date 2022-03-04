@@ -1,4 +1,5 @@
 use actix::{Actor, Addr, SyncContext};
+use crate::config::database::DbExecutor;
 use crate::config::tracing::log;
 
 #[derive(Debug)]
@@ -19,10 +20,9 @@ impl Actor for HealthActor{
 #[derive(Debug, Clone)]
 pub struct AppState {
     pub health_actor_addr: Addr<HealthActor>,
+    pub db_actor_addr: Addr<DbExecutor>,
 }
 
-#[derive(Cherry)]
-#[cherry(table = "[Sample].[UserSample]")]
 pub struct User {
     pub id: i32,
     pub name: String,
